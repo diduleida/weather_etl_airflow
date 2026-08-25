@@ -1,0 +1,6 @@
+requests==2.34.2
+dotenv==0.9.9
+pandas==3.0.5
+minio==7.2.20
+sqlalchemy==2.0.52
+psycopg2-binary==2.9.12
