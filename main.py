@@ -13,3 +13,7 @@ validation_data = validation(extract_data)
 
 transform_data = transform(validation_data)
 
+
+
+print(transform_data.iloc[5])
+transform_data.info()

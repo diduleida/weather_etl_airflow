@@ -1,0 +1,34 @@
+INSERT INTO weather (
+    id,
+    country,
+    name,
+    datetime,
+    temperature,
+    feels_like,
+    temp_min,
+    temp_max,
+    sea_level,
+    wind_speed,
+    rain_1h,
+    cloudiness,
+    sunrise,
+    sunset,
+    weather_description
+)
+SELECT
+    id,
+    country,
+    name,
+    datetime,
+    temperature,
+    feels_like,
+    temp_min,
+    temp_max,
+    sea_level,
+    wind_speed,
+    rain_1h,
+    cloudiness,
+    sunrise,
+    sunset,
+    weather_description
+FROM weather_raw
