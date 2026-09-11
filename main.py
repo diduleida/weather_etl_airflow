@@ -15,5 +15,5 @@ transform_data = transform(validation_data)
 
 
 
-print(transform_data.iloc[5])
+print(extract_data)
 transform_data.info()

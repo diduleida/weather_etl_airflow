@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine # за допомогою нього ми будемо спілкуватися з бд
-from config import DB_USER, DB_PASSWORD, DB_HOST,DB_PORT ,DB_NAME
+from .config import DB_USER, DB_PASSWORD, DB_HOST,DB_PORT , TABLE_NAME, DB_NAME
 
 
 def load(df):
@@ -7,4 +7,4 @@ def load(df):
     engine=create_engine(
         f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
     )
-    df.to_sql(f'{DB_NAME}',engine, if_exist='append',index=False)
+    df.to_sql(f'{TABLE_NAME}',engine, if_exists='append',index=False)

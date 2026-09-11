@@ -1,7 +1,10 @@
 from minio import Minio
 import io
 import json
-from config import MINIO_ENDPOINT,MINIO_ACCESS_KEY,MINIO_SECRET_KEY, MINIO_BUCKET
+from .config import MINIO_ENDPOINT,MINIO_ACCESS_KEY,MINIO_SECRET_KEY, MINIO_BUCKET
+
+
+
 
 
 # створюємо агента minIO
@@ -12,6 +15,26 @@ def get_minio_client():
         secret_key=MINIO_SECRET_KEY,
         secure=False # кажемо бібліотеці по якому протоколу підулючатися до minIO (http)
         )
+
+
+
+
+
+# читати дані
+def read_raw(filename):
+    client = get_minio_client()
+    response = client.get_object( # беремо наші дані з такого-то середовища і такою-то назвою 
+        MINIO_BUCKET,
+        filename
+    )
+    data = json.loads(response.read().decode('utf-8')) # беремо наші дані і перетворюємо в str, а load перетворює в python object
+    response.close() # закриваємо потік, який ми відкрили через get_object()
+    response.release_conn() # повертаємо HTTP-з'єднання назад у пул з'єднань minIO
+    return data
+
+
+
+
 
 # зберігаємо дані
 def save_raw(data,batch_id):
@@ -36,3 +59,5 @@ def save_raw(data,batch_id):
         content_type="application/json"# тип об'єкту який завантажуємо
     )
     print(f'{filename} saved successfully!')
+    return filename
+
