@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS weather_raw(
+    batch_id VARCHAR NOT NULL,
     visibility BIGINT,
-    datetime TIMESTAMPTZ NOT NULL,
+    datetime TIMESTAMPTZ,
     timezone BIGINT,
     id BIGINT NOT NULL,
     name VARCHAR NOT NULL,

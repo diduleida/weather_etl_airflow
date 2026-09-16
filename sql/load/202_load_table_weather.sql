@@ -1,5 +1,6 @@
 INSERT INTO weather (
     id,
+    batch_id,
     country,
     name,
     datetime,
@@ -17,6 +18,7 @@ INSERT INTO weather (
 )
 SELECT
     id,
+    batch_id,
     country,
     name,
     datetime,
@@ -32,3 +34,4 @@ SELECT
     sunset,
     weather_description
 FROM weather_raw
+WHERE batch_id NOT IN (SELECT batch_id FROM weather)

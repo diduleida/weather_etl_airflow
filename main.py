@@ -16,4 +16,3 @@ transform_data = transform(validation_data)
 
 
 print(extract_data)
-transform_data.info()

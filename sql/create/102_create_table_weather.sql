@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS weather(
     id BIGINT NOT NULL,
+    batch_id VARCHAR NOT NULL,
     country VARCHAR NOT NULL,
     name VARCHAR NOT NULL,
     datetime TIMESTAMPTZ NOT NULL,

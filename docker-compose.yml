@@ -50,7 +50,7 @@ services:
     image: minio/minio  
     # server - запусти MinIO як object storage server (команда MinIO)
     # /data - шлях до папки всередині сервера  (для зберігання даних)
-    command: server /data
+    command: server /data --console-address ":9001"
     # передаємо змінні оточення всередину контейнера (паролі, ключі, режими роботи і дт)
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}

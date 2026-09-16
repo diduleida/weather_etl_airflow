@@ -46,18 +46,24 @@ def transform_and_load(**context):
     )
     data=read_raw(filename)
     df = transform(data)
+    batch_id = context['run_id']
+    df['batch_id'] = batch_id
     load(df)
     return f'{filename} loaded successfully!'
 
 
-def load_weather():
-        engine=create_engine(
+
+# engine — створює "точку входу" для підключення до БД
+# це вже для load.sql файлів з'єднання
+engine=create_engine(
         f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
         )
+
+
+def load_weather():
         with open('/opt/airflow/sql/load/202_load_table_weather.sql','r') as file:
              sql = file.read()
 
-        # engine — створює "точку входу" для підключення до БД
         # begin -  відкрий з'єднання з бд і почни транзакцію (робимо канал)
         # connection.execute() - виконати sql команду через з'єднання
         # sql - це той самий insert into
@@ -65,18 +71,27 @@ def load_weather():
         with engine.begin() as connection:
              connection.execute(text(sql))
 
+def load_current_weather(**context):
+     with open('/opt/airflow/sql/load/203_load_table_current_weather.sql', 'r') as file:
+        sql = file.read()
+
+     with engine.begin() as connection:
+          connection.execute(text(sql))
+     
+     
+
 
 with DAG(
     # тут описуємо як поводитися з dag
     dag_id='weather_pipline', # ідентифікатор dag в Airflow, так будемо звертатися до нього і тд
     start_date=datetime(2026, 9, 1),
-    schedule='@daily', # розклад як часто запускати і чи взагалі запускати
+    schedule='@hourly', # розклад як часто запускати і чи взагалі запускати
     catchup=False # чи робити пропушені запуски
 ) as dag: # назва всередині блоку, як Python називає об'єкт DAG, коли будемо звертатися до daga від python-коду
     # а тут опис роботи, з цим і як працювати
     extract_task = PythonOperator( # назва змінної в коді
         task_id='extract_weather', # це вже назва таски 
-        python_callable=extract_and_save, # тут ми викликаємофункцію, яку самі написали вище або імпортували
+        python_callable=extract_and_save, # тут ми викликаємо функцію, яку самі написали вище або імпортували
     )
     validate_task = PythonOperator(
         task_id='validate_weather',
@@ -90,9 +105,13 @@ with DAG(
          task_id='load_weather',
          python_callable=load_weather
     )
+    load_current_weather_task = PythonOperator(
+         task_id='load_current_weather',
+         python_callable=load_current_weather
+    )
 
 
-    extract_task >> validate_task >> transform_and_load_task >> load_weather_task
+    extract_task >> validate_task >> transform_and_load_task >> load_weather_task >> load_current_weather_task
 
 
 

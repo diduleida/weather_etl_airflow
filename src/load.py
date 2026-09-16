@@ -8,3 +8,6 @@ def load(df):
         f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
     )
     df.to_sql(f'{TABLE_NAME}',engine, if_exists='append',index=False)
+
+
+
