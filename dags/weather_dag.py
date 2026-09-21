@@ -1,13 +1,14 @@
 from airflow import DAG # клас DAG  (контейнер для всього  workflow)
 from airflow.operators.python import PythonOperator # міст між Airflow і  Python-функцією
-from sqlalchemy import create_engine, text # за допомогою нього ми будемо спілкуватися з бд
+from sqlalchemy import text 
 from datetime import datetime
-from src.config import GEOCODING_URL, WEATHER_URL, API_KEY, DB_USER, DB_PASSWORD, DB_HOST,DB_PORT , DB_NAME
+from src.config import GEOCODING_URL, WEATHER_URL, API_KEY 
 from src.extract import extract
 from src.storage import save_raw, read_raw
 from src.validation import validation
 from src.transform import transform
 from src.load import load
+from src.db import engine
 
 
 # ** - kwargs (keyword arguments) - довільна кількість аргументів можна отримати
@@ -51,13 +52,6 @@ def transform_and_load(**context):
     load(df)
     return f'{filename} loaded successfully!'
 
-
-
-# engine — створює "точку входу" для підключення до БД
-# це вже для load.sql файлів з'єднання
-engine=create_engine(
-        f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-        )
 
 
 def load_weather():
