@@ -7,12 +7,12 @@ import pandas as pd
 
 
 
-extract_data = extract(GEOCODING_URL, WEATHER_URL, API_KEY)
+#extract_data = extract(GEOCODING_URL, WEATHER_URL, API_KEY)
 
-validation_data = validation(extract_data)
+#validation_data = validation(extract_data)
 
-transform_data = transform(validation_data)
+#transform_data = transform(validation_data)
 
 
 
-print(extract_data)
+
